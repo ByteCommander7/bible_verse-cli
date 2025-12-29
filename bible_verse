@@ -1,5 +1,14 @@
 #!/bin/bash
 
+# Initial variables
+version="RSVCE"
+verse_range=$(printf "%s" "$3" | grep -oE "[0-9]+-[0-9]+")
+verse_result=
+# Use as version if version argument exist
+if [ $# -eq 4 ]; then
+  version=$4
+fi
+
 # Help menu
 if [ "$1" = "-h" ] || [ "$1" = "--help" ]; then
   echo "Usage: ./bible_verse book_name chapter verse [version]"
@@ -18,15 +27,6 @@ fi
 if [ $# -lt 3 ]; then
   echo "Error: Incorrect number of arguments."
   exit 1
-fi
-
-# Initial variables 
-version="ESV"
-verse_range=$(printf "%s" "$3" | grep -oE "[0-9]+-[0-9]+")
-verse_result=
-# Use as version if version argument exist
-if [ $# -eq 4 ]; then
-  version=$4
 fi
 
 # Prints book name,chapter,verse,and version
@@ -54,5 +54,6 @@ if [ -n "$verse_range" ]; then
 		exit 0 
 	fi
 fi
+
 request_and_parse "$1" "$2" "$3" "$version"
 printf "%s\n" "$verse_result"
