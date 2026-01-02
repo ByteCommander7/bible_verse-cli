@@ -9,20 +9,46 @@ if [ $# -eq 4 ]; then
   version=$4
 fi
 
+# Functions
+printVerses()
+{
+	echo
+}
+
+getVerseAmount()
+{
+	echo
+}
+
+center()
+{
+	local raw
+	local columns
+	local text
+
+	raw="$*"
+	columns=$(tput cols)
+	text=$(printf "%s" "$raw" | sed -E "s/\\\e[[0-9;]*[m]//g" | fold -s)
+
+	printf "%*b\n" $(((${#text} + columns) / 2)) "$raw"
+}
+
+
 # Help menu
-if [ "$1" = "-h" ] || [ "$1" = "--help" ]; then
-  echo "Usage: ./bible_verse book_name chapter verse [version]"
-  echo "Example: 
-  	./bible_verse John 3 16 KJV (ESV by default)
-  	./bible_verse John 3 16-21 KJV"
-  echo "For books with numbers infront of them, ex: 1 Peter
-	./bible_verse 1Peter 1 1-2 SBLGNT"
-  echo "For output to image
-  	./bible_verse John 3 16 KJV | python3 verseonimage.py
-  	./bible_verse John 3 16-21 KJV | python3 verseonimage.py
-	./bible_verse John 3 16-21 NKJV | python3 versetoimage.py <your image.png>"
-  exit 0
-fi
+usage()
+{
+	echo "Usage: ./bible_verse book_name chapter verse [version]"
+	echo -e "Example:
+		${GREEN}bible_verse${RESET} John 3 16 KJV (ESV by default)
+		${GREEN}bible_verse${RESET} John 3 16-21 KJV"
+	echo -e "For books with numbers infront of them, ex: 1 Peter
+		${GREEN}bible_verse${RESET} 1Peter 1 1-2 SBLGNT"
+	echo -e "For output to image
+		${GREEN}bible_verse${RESET} John 3 16 KJV | python3 verseonimage.py
+		${GREEN}bible_verse${RESET} John 3 16-21 KJV | python3 verseonimage.py
+		${GREEN}bible_verse${RESET} John 3 16-21 NKJV | python3 versetoimage.py <your image.png>"
+	exit
+}
 
 if [ $# -lt 3 ]; then
   echo "Error: Incorrect number of arguments."
@@ -57,3 +83,31 @@ fi
 
 request_and_parse "$1" "$2" "$3" "$version"
 printf "%s\n" "$verse_result"
+
+main()
+{
+	# Process arguments
+
+	# Check for help
+	if [ "$1" = "-h" ] || [ "$1" = "--help" ]; then
+		usage
+	fi
+
+	# Ensure the correct number of arguments have been submitted.
+	if [ $# -lt 3 ]; then
+	  printf "%b\n" "${RED}Error: Incorrect number of arguments.${RESET}"
+	  exit -1
+	fi
+
+
+	center "${YELLOW}Hello, there! This is a really long text.${RESET}"
+	request_and_parse "$1" "$2" "$3" "$version"
+	# Prints book name,chapter,verse,and version
+	# printf "%s\n" "$1 $2 $3 $version"
+
+	printf "%s\n" "=========="
+	center "${BLUE}$verse_result${RESET}"
+	printf "%s\n" "=========="
+}
+
+main "$@"
