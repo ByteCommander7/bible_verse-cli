@@ -1,6 +1,15 @@
 #!/bin/bash
 
-# Initial variables
+# Colors
+RED="\e[31m"
+GREEN="\e[32m"
+BLUE="\e[34m"
+YELLOW="\e[33m"
+PURPLE="\e[35m"
+CYAN="\e[36"
+RESET="\e[0m"
+
+# Variables
 version="RSVCE"
 verse_range=$(printf "%s" "$3" | grep -oE "[0-9]+-[0-9]+")
 verse_result=
@@ -50,14 +59,6 @@ usage()
 	exit
 }
 
-if [ $# -lt 3 ]; then
-  echo "Error: Incorrect number of arguments."
-  exit 1
-fi
-
-# Prints book name,chapter,verse,and version
-printf "%s\n" "$1 $2 $3 $version"
-
 # Request to biblegateway and parse response
 request_and_parse(){
 	bible=$(curl -s "https://www.biblegateway.com/passage/?search=$1+$2:$3&version=$4")
@@ -81,9 +82,6 @@ if [ -n "$verse_range" ]; then
 	fi
 fi
 
-request_and_parse "$1" "$2" "$3" "$version"
-printf "%s\n" "$verse_result"
-
 main()
 {
 	# Process arguments
@@ -96,7 +94,7 @@ main()
 	# Ensure the correct number of arguments have been submitted.
 	if [ $# -lt 3 ]; then
 	  printf "%b\n" "${RED}Error: Incorrect number of arguments.${RESET}"
-	  exit -1
+	  exit 1
 	fi
 
 
@@ -108,6 +106,9 @@ main()
 	printf "%s\n" "=========="
 	center "${BLUE}$verse_result${RESET}"
 	printf "%s\n" "=========="
+	request_and_parse "$1" "$2" "$3" "$version"
+	printf "%s\n" "$verse_result"
+
 }
 
 main "$@"
