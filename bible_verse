@@ -42,7 +42,6 @@ center()
 	printf "%*b\n" $(((${#text} + columns) / 2)) "$raw"
 }
 
-
 # Help menu
 usage()
 {
@@ -97,7 +96,6 @@ main()
 	  exit 1
 	fi
 
-
 	center "${YELLOW}Hello, there! This is a really long text.${RESET}"
 	request_and_parse "$1" "$2" "$3" "$version"
 	# Prints book name,chapter,verse,and version
@@ -107,8 +105,6 @@ main()
 	center "${BLUE}$verse_result${RESET}"
 	printf "%s\n" "=========="
 	request_and_parse "$1" "$2" "$3" "$version"
-	printf "%s\n" "$verse_result"
-
 }
 
 main "$@"
