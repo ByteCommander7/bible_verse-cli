@@ -6,7 +6,7 @@ GREEN="\e[32m"
 BLUE="\e[34m"
 YELLOW="\e[33m"
 PURPLE="\e[35m"
-CYAN="\e[36"
+CYAN="\e[36m"
 RESET="\e[0m"
 
 # Variables
@@ -19,17 +19,17 @@ if [ $# -eq 4 ]; then
 fi
 
 # Functions
-printVerses()
+function printVerses()
 {
 	echo
 }
 
-getVerseAmount()
+function getVerseAmount()
 {
 	echo
 }
 
-center()
+function center()
 {
 	local raw
 	local columns
@@ -43,7 +43,7 @@ center()
 }
 
 # Help menu
-usage()
+function usage()
 {
 	echo "Usage: ./bible_verse book_name chapter verse [version]"
 	echo -e "Example:
@@ -59,7 +59,8 @@ usage()
 }
 
 # Request to biblegateway and parse response
-request_and_parse(){
+function request_and_parse()
+{
 	bible=$(curl -s "https://www.biblegateway.com/passage/?search=$1+$2:$3&version=$4")
 	verse_text=$(printf "%s" "$bible" | sed -n 's/.*<meta property="og:description" content="\(.*\)".*/\1/p')
 	verse_result="${verse_result} ${verse_text}"
@@ -81,7 +82,7 @@ if [ -n "$verse_range" ]; then
 	fi
 fi
 
-main()
+function main()
 {
 	# Process arguments
 
