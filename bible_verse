@@ -11,7 +11,8 @@ RESET="\e[0m"
 
 # Variables
 version="RSVCE"
-verse_range=$(printf "%s" "$3" | grep -oE "[0-9]+-[0-9]+")
+verse_range=$(printf "%s" "$3" | grep -o "[0-9]\+-[0-9]\+")
+echo "$verse_range"
 verse_result=
 # Use as version if version argument exist
 if [ $# -eq 4 ]; then
@@ -37,7 +38,7 @@ function center()
 
 	raw="$*"
 	columns=$(tput cols)
-	text=$(printf "%s" "$raw" | sed -E "s/\\\e[[0-9;]*[m]//g" | fold -s)
+	text=$(printf "%s" "$raw" | sed "s/\\\e[[0-9;]*m//g" | fold -s)
 
 	printf "%*b\n" $(((${#text} + columns) / 2)) "$raw"
 }
